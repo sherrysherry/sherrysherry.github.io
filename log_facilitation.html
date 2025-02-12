@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facilitation Logger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        button {
+            font-size: 18px;
+            padding: 12px 24px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        #logButton {
+            background-color: #007BFF;
+            color: white;
+        }
+        #logButton:hover {
+            background-color: #0056b3;
+        }
+        #clearButton {
+            background-color: #dc3545;
+            color: white;
+        }
+        #clearButton:hover {
+            background-color: #a71d2a;
+        }
+        #exportButton {
+            background-color: #28a745;
+            color: white;
+        }
+        #exportButton:hover {
+            background-color: #218838;
+        }
+        table {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Meeting Facilitation Logger</h1>
+    <p>Press the button whenever facilitation is needed.</p>
+    <button id="logButton">Facilitation Needed</button>
+    <button id="exportButton">Export to JSON</button>
+    <button id="clearButton">Clear Logs</button>
+
+    <h2>Logged Times</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody id="logTable">
+        </tbody>
+    </table>
+
+    <script>
+        let logs = JSON.parse(localStorage.getItem("facilitationLogs")) || [];
+
+        function updateTable() {
+            const table = document.getElementById("logTable");
+            table.innerHTML = "";
+            logs.forEach((log, index) => {
+                const row = table.insertRow();
+                row.insertCell(0).innerText = index + 1;
+                row.insertCell(1).innerText = log.timestamp;
+            });
+        }
+
+        document.getElementById("logButton").addEventListener("click", function() {
+            const timestamp = new Date().toLocaleString();
+            logs.push({ timestamp });
+            localStorage.setItem("facilitationLogs", JSON.stringify(logs));
+            updateTable();
+        });
+
+        document.getElementById("clearButton").addEventListener("click", function() {
+            if (confirm("Are you sure you want to clear all logs?")) {
+                logs = [];
+                localStorage.removeItem("facilitationLogs");
+                updateTable();
+            }
+        });
+
+        document.getElementById("exportButton").addEventListener("click", function() {
+            if (logs.length === 0) {
+                alert("No logs to export.");
+                return;
+            }
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(logs, null, 2));
+            const downloadAnchor = document.createElement("a");
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "facilitation_logs.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            document.body.removeChild(downloadAnchor);
+        });
+
+        updateTable();
+    </script>
+
+</body>
+</html>
