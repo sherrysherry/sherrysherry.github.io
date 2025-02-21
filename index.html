@@ -12,17 +12,22 @@
             background-color: #f8f9fa;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: auto;
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
         button {
             font-size: 16px;
             padding: 12px 20px;
-            margin: 10px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
@@ -30,59 +35,41 @@
             color: white;
             transition: all 0.2s;
         }
-        button:hover {
-            background-color: #495057;
-        }
-        button:active {
-            background-color: #343a40;
-        }
-        button:disabled {
-            background-color: #aaa;
-            cursor: not-allowed;
-        }
-        #startRecording { background-color: #28a745; }
-        #startRecording:hover { background-color: #218838; }
-        #startRecording:active { background-color: #1e7e34; }
-        
-        #stopRecording { background-color: #dc3545; }
-        #stopRecording:hover { background-color: #c82333; }
-        #stopRecording:active { background-color: #bd2130; }
+        button:hover { background-color: #495057; }
+        button:active { background-color: #343a40; }
+        button:disabled { background-color: #aaa; cursor: not-allowed; }
 
-        
-        #clearButton { background-color: #6c757d; }
-        #clearButton:hover { background-color: #5a6268; }
-        #clearButton:active { background-color: #495057; }
-        
+        .content {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        #videoContainer {
+            width: 60%;
+            padding: 10px;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        .logButtons {
+            width: 40%;
+        }
+
         .metaButton {
             width: 100%; 
             padding: 10px; 
             font-size: 14px; 
-            background-color: #d0e1f9; /* Pale blue */
-            color: #004085; /* Dark blue text */
+            background-color: #d0e1f9;
+            color: #004085;
             border: 1px solid #b0c4de;
+            margin-bottom: 5px;
         }
-        .metaButton:hover {
-            background-color: #a4c6f8; /* Slightly darker blue on hover */
-        }
-        .metaButton:active {
-            background-color: #007bff; /* Blue on click */
-            color: white;
-        }
-        
-        #recordingIndicator {
-            display: none;
-            color: red;
-            font-weight: bold;
-            margin-top: 10px;
-            font-size: 18px;
-        }
-        #videoContainer {
-            display: none;
-            margin-top: 20px;
-        }
+        .metaButton:hover { background-color: #a4c6f8; }
+        .metaButton:active { background-color: #007bff; color: white; }
+
         table {
             width: 100%;
-            margin: 20px auto;
+            margin-top: 20px;
             border-collapse: collapse;
             background: white;
         }
@@ -91,56 +78,49 @@
             padding: 12px;
             text-align: left;
         }
-        th {
-            background-color: #343a40;
-            color: white;
-        }
+        th { background-color: #343a40; color: white; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Meeting Facilitation Needs Logger</h1>
-        <!--
-        <label for="mode">Select Mode:</label>
-        <select id="mode">
-            <option value="liveCoding">Live Coding Mode</option>
-            <option value="videoCoding">Video Coding Mode</option>
-        </select>
-        -->
-        <div id="videoContainer">
-            <input type="file" id="videoUpload" accept="video/*">
-            <video id="videoPlayer" width="100%" controls></video>
-        </div>
-        
-        <div>
-            <button id="startRecording">Start Recording</button>
-            <button id="stopRecording" disabled>Stop Recording</button>
-            <button id="exportAllButton" disabled>Export All</button>
-        </div>
-        
-        <h2>Meta-Cognitive State Logs</h2>
-        <div>
-            <button class="metaButton" onclick="logMeta('Adjust pace')">Adjust pace</button>
-            <button class="metaButton" onclick="logMeta('Express my opinion')">Express my opinion</button>
-            <button class="metaButton" onclick="logMeta('Request clarification')">Request clarification</button>
-            <button class="metaButton" onclick="logMeta('Invite diverse input')">Invite diverse input</button>
-            <button class="metaButton" onclick="logMeta('Evaluate and conclude')">Evaluate and conclude</button>
-        </div>
-        
-        <div>
-            <button id="clearButton">Clear Logs</button>
-        </div>
-        
-        <p id="recordingIndicator">● Recording...</p>
+        <h1>ミーティング・ファシリテーション・ニーズ・ロガー</h1>
 
-        <h2>Logged Times</h2>
+        <!-- Control Buttons -->
+        <div class="controls">
+            <button id="playButton" disabled>再生</button>
+            <button id="pauseButton" disabled>一時停止</button>
+            <button id="stopButton" disabled>停止</button>
+            <button id="clearButton">ログをクリア</button>
+            <button id="exportButton" disabled>ログをエクスポート</button>
+        </div>
+
+        <!-- Video & Log Buttons Side by Side -->
+        <div class="content">
+            <div id="videoContainer">
+                <input type="file" id="videoUpload" accept="video/*">
+                <video id="videoPlayer" width="100%" controls></video>
+            </div>
+
+            <div class="logButtons">
+                <h2>思考ログ</h2>
+                <p>議論の流れを意識し、次に必要なアクションを記録しましょう。</p>
+                <button class="metaButton" onclick="logMeta('進行を管理する')">進行を管理する</button>
+                <button class="metaButton" onclick="logMeta('意見を共有する')">意見を共有する</button>
+                <button class="metaButton" onclick="logMeta('質問・明確化する')">質問・明確化する</button>
+                <button class="metaButton" onclick="logMeta('議論を活性化する')">議論を活性化する</button>
+                <button class="metaButton" onclick="logMeta('結論をまとめる')">結論をまとめる</button>
+                <button class="metaButton" onclick="logMeta('タスクを決める')">タスクを決める</button>
+            </div>
+        </div>
+
+        <!-- Log Table at the Bottom -->
+        <h2>記録されたログ</h2>
         <table>
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Timestamp</th>
-                    <th>Elapsed Time (HH:MM:SS)</th>
-                    <th>Meta Log</th>
+                    <th>ビデオ時間 (HH:MM:SS)</th>
+                    <th>思考ログ</th>
                 </tr>
             </thead>
             <tbody id="logTable"></tbody>
@@ -148,112 +128,89 @@
     </div>
 
     <script>
-        let logs = JSON.parse(localStorage.getItem("facilitationLogs")) || [];
-        let startTime;
-        let elapsed;
-        let recording = false;
-        let mediaRecorder;
-        let recordedChunks = [];
-        
+        let logs = [];
+        let videoFileName = "log"; // Default name
+
+        const videoUpload = document.getElementById("videoUpload");
+        const videoPlayer = document.getElementById("videoPlayer");
+
+        videoUpload.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                videoFileName = file.name.split('.').slice(0, -1).join('.'); // Get filename without extension
+                videoPlayer.src = URL.createObjectURL(file);
+                videoPlayer.load();
+                document.getElementById("playButton").disabled = false;
+                document.getElementById("exportButton").disabled = logs.length === 0;
+            }
+        });
+
+        document.getElementById("playButton").addEventListener("click", function() {
+            videoPlayer.play();
+            this.disabled = true;
+            document.getElementById("pauseButton").disabled = false;
+            document.getElementById("stopButton").disabled = false;
+        });
+
+        document.getElementById("pauseButton").addEventListener("click", function() {
+            videoPlayer.pause();
+            document.getElementById("playButton").disabled = false;
+        });
+
+        document.getElementById("stopButton").addEventListener("click", function() {
+            videoPlayer.pause();
+            videoPlayer.currentTime = 0;
+            document.getElementById("playButton").disabled = false;
+            this.disabled = true;
+            document.getElementById("pauseButton").disabled = true;
+        });
+
+        function formatTime(seconds) {
+            let h = Math.floor(seconds / 3600);
+            let m = Math.floor((seconds % 3600) / 60);
+            let s = Math.floor(seconds % 60);
+            return [h, m, s].map(n => String(n).padStart(2, '0')).join(":");
+        }
+
+        function logMeta(metaLog) {
+            let elapsedTime = formatTime(videoPlayer.currentTime);
+            logs.push({ elapsedTime, metaLog });
+            updateTable();
+            document.getElementById("exportButton").disabled = false;
+        }
+
         function updateTable() {
             const table = document.getElementById("logTable");
             table.innerHTML = "";
             logs.forEach((log, index) => {
                 const row = table.insertRow();
                 row.insertCell(0).innerText = index + 1;
-                row.insertCell(1).innerText = log.timestamp;
-                row.insertCell(2).innerText = log.elapsedTime || "N/A";
-                row.insertCell(3).innerText = log.metaLog || "";
+                row.insertCell(1).innerText = log.elapsedTime;
+                row.insertCell(2).innerText = log.metaLog;
             });
-        }
-
-        function logMeta(metaLog) {
-            const timestamp = new Date().toLocaleString();
-            let elapsedMs = startTime ? (Date.now() - startTime) : 0;
-            let hours = String(Math.floor(elapsedMs / 3600000)).padStart(2, '0');
-            let minutes = String(Math.floor((elapsedMs % 3600000) / 60000)).padStart(2, '0');
-            let seconds = String(Math.floor((elapsedMs % 60000) / 1000)).padStart(2, '0');
-            let elapsedTime = startTime ? `${hours}:${minutes}:${seconds}` : "N/A";
-            logs.push({ timestamp, elapsedTime, metaLog });
-            localStorage.setItem("facilitationLogs", JSON.stringify(logs));
-            updateTable();
         }
 
         document.getElementById("clearButton").addEventListener("click", function() {
-            if (confirm("Are you sure you want to clear all logs?")) {
+            if (confirm("ログをすべてクリアしますか？")) {
                 logs = [];
-                localStorage.removeItem("facilitationLogs");
                 updateTable();
+                document.getElementById("exportButton").disabled = true;
             }
         });
 
-        document.getElementById("startRecording").addEventListener("click", async function() {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
-            recordedChunks = [];
-            mediaRecorder.ondataavailable = event => recordedChunks.push(event.data);
-            mediaRecorder.onstop = function() {
-                const blob = new Blob(recordedChunks, { type: 'audio/webm' });
-                const url = URL.createObjectURL(blob);
-            };
-            mediaRecorder.start();
-            recording = true;
-            startTime = Date.now();
-            document.getElementById("recordingIndicator").style.display = "block";
-            document.getElementById("stopRecording").disabled = false;
-            document.getElementById("startRecording").disabled = true;
+        document.getElementById("exportButton").addEventListener("click", function() {
+            const today = new Date().toISOString().slice(0, 10);
+            const fileName = `${videoFileName}_${today}.json`;
+
+            const logData = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(logs, null, 2));
+            const logAnchor = document.createElement("a");
+            logAnchor.setAttribute("href", logData);
+            logAnchor.setAttribute("download", fileName);
+            document.body.appendChild(logAnchor);
+            logAnchor.click();
+            document.body.removeChild(logAnchor);
         });
 
-        document.getElementById("stopRecording").addEventListener("click", function() {
-            if (mediaRecorder && mediaRecorder.state !== "inactive") {
-                mediaRecorder.stop();
-            }
-            recording = false;
-            startTime = null;
-            document.getElementById("recordingIndicator").style.display = "none";
-            document.getElementById("stopRecording").disabled = true;
-            document.getElementById("startRecording").disabled = false;
-            
-            mediaRecorder.onstop = function() {
-                const audioBlob = new Blob(recordedChunks, { type: 'audio/webm' });
-                const audioUrl = URL.createObjectURL(audioBlob);
-                document.getElementById("exportAllButton").dataset.audioUrl = audioUrl;
-                document.getElementById("exportAllButton").disabled = false; // Enable export after recording stops
-            };
-        });
-
-
-        updateTable();
-            document.getElementById("exportAllButton").addEventListener("click", function() {
-                const now = new Date();
-                const filename = now.getFullYear().toString() +
-                    String(now.getMonth() + 1).padStart(2, '0') +
-                    String(now.getDate()).padStart(2, '0') + "-" +
-                    String(now.getHours()).padStart(2, '0') +
-                    String(now.getMinutes()).padStart(2, '0');
-            
-                // Export Logs
-                const logData = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(logs, null, 2));
-                const logAnchor = document.createElement("a");
-                logAnchor.setAttribute("href", logData);
-                logAnchor.setAttribute("download", filename + "-logs.json");
-                document.body.appendChild(logAnchor);
-                logAnchor.click();
-                document.body.removeChild(logAnchor);
-            
-                // Export Recording
-                const recordingUrl = document.getElementById("exportAllButton").dataset.audioUrl;
-                if (recordingUrl) {
-                    const recordingAnchor = document.createElement("a");
-                    recordingAnchor.href = recordingUrl;
-                    recordingAnchor.download = filename + "-recording.webm";
-                    document.body.appendChild(recordingAnchor);
-                    recordingAnchor.click();
-                    document.body.removeChild(recordingAnchor);
-                } else {
-                    alert("No recording found.");
-                }
-            });
-</script>
+    </script>
 </body>
 </html>
