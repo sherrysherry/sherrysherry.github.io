@@ -38,6 +38,15 @@
         button:hover { background-color: #495057; }
         button:active { background-color: #343a40; }
         button:disabled { background-color: #aaa; cursor: not-allowed; }
+        .edit-btn, .delete-btn {
+            cursor: pointer;
+            padding: 5px 10px;
+            border: none;
+            margin: 2px;
+        }
+        .edit-btn { background-color: #ffc107; color: black; }
+        .delete-btn { background-color: #dc3545; color: white; }
+
 
         .content {
             display: flex;
@@ -121,6 +130,7 @@
                     <th>#</th>
                     <th>ビデオ時間 (HH:MM:SS)</th>
                     <th>思考ログ</th>
+                    <th>操作</th> <!-- New column for Edit/Delete buttons -->
                 </tr>
             </thead>
             <tbody id="logTable"></tbody>
@@ -187,8 +197,29 @@
                 row.insertCell(0).innerText = index + 1;
                 row.insertCell(1).innerText = log.elapsedTime;
                 row.insertCell(2).innerText = log.metaLog;
+        
+                // Add actions column
+                const actionsCell = row.insertCell(3);
+                actionsCell.innerHTML = `<button class='edit-btn' onclick='editLog(${index})'>編集</button>
+                                         <button class='delete-btn' onclick='deleteLog(${index})'>削除</button>`;
             });
         }
+        
+        function editLog(index) {
+            const newLog = prompt("新しいログを入力してください:", logs[index].metaLog);
+            if (newLog !== null) {
+                logs[index].metaLog = newLog;
+                updateTable();
+            }
+        }
+        function deleteLog(index) {
+            if (confirm("このログを削除しますか？")) {
+                logs.splice(index, 1);
+                updateTable();
+            }
+        }
+
+
 
         document.getElementById("clearButton").addEventListener("click", function() {
             if (confirm("ログをすべてクリアしますか？")) {
