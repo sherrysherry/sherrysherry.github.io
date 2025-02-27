@@ -5,89 +5,285 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facilitation Needs Logger</title>
     <style>
+        /* General Styles */
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
             background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
+    
         .container {
-            max-width: 900px;
-            margin: auto;
+            width: 90%;
+            max-width: 1000px;
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
+    
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    
+        /* Control Buttons */
         .controls {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 20px;
         }
+    
         button {
-            font-size: 16px;
             padding: 12px 20px;
-            cursor: pointer;
-            border: none;
+            font-size: 16px;
             border-radius: 5px;
-            background-color: #6c757d;
-            color: white;
-            transition: all 0.2s;
-        }
-        button:hover { background-color: #495057; }
-        button:active { background-color: #343a40; }
-        button:disabled { background-color: #aaa; cursor: not-allowed; }
-        .edit-btn, .delete-btn {
-            cursor: pointer;
-            padding: 5px 10px;
             border: none;
-            margin: 2px;
+            cursor: pointer;
+            transition: 0.2s;
         }
-        .edit-btn { background-color: #ffc107; color: black; }
-        .delete-btn { background-color: #dc3545; color: white; }
+    
+       /* Primary Buttons - Dark Blue */
+       .primary {
+           background-color: #007bff; /* Same as active metaButton */
+           color: white;
+           border: 1px solid #b0c4de;
+       }
+       
+       .primary:hover {
+           background-color: #a4c6f8; /* Same as metaButton:hover */
+       }
+       
+       .primary:active {
+           background-color: #0056b3;
+       }
+       
+       /* Secondary Buttons - Light Blue */
+       .secondary {
+           background-color: #d0e1f9; /* Same as metaButton default */
+           color: #004085;
+           border: 1px solid #b0c4de;
+       }
+       
+       .secondary:hover {
+           background-color: #a4c6f8; /* Same as metaButton:hover */
+       }
+       
+       .secondary:active {
+           background-color: #007bff;
+           color: white;
+       }
+       
+       /* Disabled Buttons - Soft Muted Blue */
+       button:disabled {
+           background-color: #b0c4de; /* Muted blue */
+           color: #6c757d;
+           cursor: not-allowed;
+       }
 
-
-        .content {
+    
+        /* Upload & Dropdown Sections */
+        .file-upload, .dropdown-container {
             display: flex;
-            gap: 20px;
-            justify-content: space-between;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .file-upload {
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center; /* Center align elements */
+            justify-content: center; /* Center within the container */
+            gap: 10px; /* Add spacing between items */
+            width: 100%;
+            max-width: 600px; /* Adjust width */
+            margin: 0 auto; /* Ensure it's centered in the page */
+        }
+        .button-row {
+            display: flex;
+            justify-content: center; /* Center align buttons */
+            gap: 10px;
+            width: 100%;
         }
 
+
+
+    
+        label {
+            font-weight: bold;
+        }
+    
+        input[type="file"], select {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+        }
+    
+        /* Video Section */
         #videoContainer {
-            width: 60%;
-            padding: 10px;
+            width: 100%;
+            max-width: 800px;
             background-color: #f0f0f0;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 0 auto 20px;
+        }
+    
+        /* Log Buttons */
+        .logButtons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    
+        
+        
+        .metaTable {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        
+        .metaTable td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        
+        .category {
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            vertical-align: middle;
+            text-orientation: mixed;
+            padding: 10px;
+            font-size: 18px; /* Make category text larger */
+        }
+        
+        /* Improved Color Codes with Stronger Contrast */
+        .directing { background-color: #f4b400; color: black; } /* Darker yellow */
+        .sharing { background-color: #34a853; color: black; } /* Stronger green */
+        .supporting { background-color: #ea4335; color: black; } /* Stronger red */
+        .others { background-color: #4285f4; color: black; } /* Stronger blue */
+        
+        /* Button Styling */
+        .metaButton {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 2px solid #777; /* Stronger border */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
             text-align: center;
         }
-        .logButtons {
-            width: 40%;
+        
+        /* Button Colors Matching Categories with Stronger Text Contrast */
+        .metaButton.directing {
+            background-color: #f9c74f; /* Brighter yellow */
+            color: black; /* High contrast */
+        }
+        .metaButton.directing:hover {
+            background-color: #f4b400;
+            color: black;
+        }
+        
+        .metaButton.sharing {
+            background-color: #90ee90; /* Brighter green */
+            color: black;
+        }
+        .metaButton.sharing:hover {
+            background-color: #34a853;
+            color: white;
+        }
+        
+        .metaButton.supporting {
+            background-color: #ff7f7f; /* Brighter red */
+            color: black;
+        }
+        .metaButton.supporting:hover {
+            background-color: #ea4335;
+            color: white;
+        }
+        
+        .metaButton.others {
+            background-color: #87ceeb; /* Brighter blue */
+            color: black;
+        }
+        .metaButton.others:hover {
+            background-color: #4285f4;
+            color: white;
         }
 
-        .metaButton {
-            width: 100%; 
-            padding: 10px; 
-            font-size: 14px; 
-            background-color: #d0e1f9;
-            color: #004085;
-            border: 1px solid #b0c4de;
-            margin-bottom: 5px;
-        }
-        .metaButton:hover { background-color: #a4c6f8; }
-        .metaButton:active { background-color: #007bff; color: white; }
 
+    
+        /* Table Styles */
         table {
             width: 100%;
-            margin-top: 20px;
             border-collapse: collapse;
+            margin-top: 20px;
             background: white;
+            border-radius: 5px;
+            overflow: hidden;
         }
+    
         th, td {
             border: 1px solid #ddd;
             padding: 12px;
-            text-align: left;
+            text-align: center;
         }
-        th { background-color: #343a40; color: white; }
+    
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+    
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+    
+        .edit-btn, .delete-btn {
+            font-size: 14px;
+            padding: 6px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+    
+        .edit-btn {
+            background-color: #ffc107;
+            color: black;
+        }
+    
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+    
+        .edit-btn:hover {
+            background-color: #e0a800;
+        }
+    
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+    
     </style>
 </head>
 <body>
@@ -102,24 +298,140 @@
             <button id="clearButton">ログをクリア</button>
             <button id="exportButton" disabled>ログをエクスポート</button>
         </div>
+        
+        <!-- CSV Upload -->
+        <div class="file-upload">
+            <!-- CSV Selection -->
+            <div class="file-row">
+                <label for="csvUpload"><strong>CSVファイルを選択してください:</strong></label>
+                <input type="file" id="csvUpload" accept=".csv">
+            </div>
+        
+            <!-- Dropdowns for selecting filename & time points -->
+            <div class="file-row">
+                <label for="fileSelect">ファイル選択:</label>
+                <select id="fileSelect" class="dropdown"></select>
+            </div>
+        
+            <div class="file-row">
+                <label for="timeSelect">時間選択:</label>
+                <select id="timeSelect" class="dropdown"></select>
+            </div>
+        
+            <!-- Navigation Buttons -->
+            <div class="button-row">
+                <button id="prevButton">前へ</button>
+                <button id="nextButton">次へ</button>
+            </div>
+        
+            <!-- Selected Time Point -->
+            <h2>選択された時間ポイント</h2>
+            <p id="selectedPattern">パターン名: -</p>
+        </div>
+
+
+
+
 
         <!-- Video & Log Buttons Side by Side -->
         <div class="content">
-            <div id="videoContainer">
-                <input type="file" id="videoUpload" accept="video/*">
-                <video id="videoPlayer" width="100%" controls></video>
+            <!-- Video & Log Buttons Side by Side -->
+            <div class="content">
+                <div id="videoContainer">
+                    <label for="videoUpload"><strong>ビデオファイルを選択してください:</strong></label>
+                    <input type="file" id="videoUpload" accept="video/*">
+                    <video id="videoPlayer" width="100%" controls></video>
+                </div>
             </div>
-
+            
             <div class="logButtons">
                 <h2>思考ログ</h2>
                 <p>議論の流れを意識し、次に必要なアクションを記録しましょう。</p>
-                <button class="metaButton" onclick="logMeta('進行を管理する')">進行を管理する</button>
-                <button class="metaButton" onclick="logMeta('意見を共有する')">意見を共有する</button>
-                <button class="metaButton" onclick="logMeta('質問・明確化する')">質問・明確化する</button>
-                <button class="metaButton" onclick="logMeta('議論を活性化する')">議論を活性化する</button>
-                <button class="metaButton" onclick="logMeta('結論をまとめる')">結論をまとめる</button>
-                <button class="metaButton" onclick="logMeta('タスクを決める')">タスクを決める</button>
+            
+                <table class="metaTable">
+                    <tr>
+                        <td class="category directing" rowspan="4">Directing</td>
+                        <td>
+                            <button class="metaButton directing" onclick="logMeta('Clarify a topic')">トピックを明確にする (Clarify a topic)</button>
+                        </td>
+                        <td class="explanation">トピックの曖昧な点を共有し、背景やゴールを明確にする。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="metaButton directing" onclick="logMeta('Manage time')">時間を管理する (Manage time)</button>
+                        </td>
+                        <td class="explanation">タイムスケジュールを示し、持ち時間を管理する。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="metaButton directing" onclick="logMeta('Structure')">構造化する (Structure)</button>
+                        </td>
+                        <td class="explanation">議論の枠組みを整理し、発言を要約する。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="metaButton directing" onclick="logMeta('Get back on track')">軌道修正する (Get back on track)</button>
+                        </td>
+                        <td class="explanation">議論を元の軸に戻し、焦点を調整する。</td>
+                    </tr>
+            
+                    <tr>
+                        <td class="category sharing" rowspan="5">Sharing</td>
+                        <td>
+                            <button class="metaButton sharing" onclick="logMeta('Listen')">聞く (Listen)</button>
+                        </td>
+                        <td class="explanation">発言を要約し、話し方のスタイルに注意を払う。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="metaButton sharing" onclick="logMeta('Relate')">関連付ける (Relate)</button>
+                        </td>
+                        <td class="explanation">発言の背景を明示し、他の意見とつなげる。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="metaButton sharing" onclick="logMeta('Evaluate')">評価する (Evaluate)</button>
+                        </td>
+                        <td class="explanation">意見の根拠を確認し、議論の妥当性を検討する。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="metaButton sharing" onclick="logMeta('Present')">発表する (Present)</button>
+                        </td>
+                        <td class="explanation">自分の意見を説明し、必要に応じて補足する。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="metaButton sharing" onclick="logMeta('Question')">質問する (Question)</button>
+                        </td>
+                        <td class="explanation">疑問を明確にし、発言の意図を確認する。</td>
+                    </tr>
+            
+                    <tr>
+                        <td class="category supporting" rowspan="2">Supporting</td>
+                        <td>
+                            <button class="metaButton supporting" onclick="logMeta('Facilitate discussion')">議論を促進する (Facilitate discussion)</button>
+                        </td>
+                        <td class="explanation">対立点や一致点を整理し、発言を引き出す。</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="metaButton supporting" onclick="logMeta('Foster mood')">雰囲気を作る (Foster mood)</button>
+                        </td>
+                        <td class="explanation">話しやすい環境を整え、発言を促す。</td>
+                    </tr>
+            
+                    <tr>
+                        <td class="category others" rowspan="1">Others</td>
+                        <td>
+                            <button class="metaButton others" onclick="logMeta('Distribute tasks')">タスクを分担する (Distribute tasks)</button>
+                        </td>
+                        <td class="explanation">タスクの内容を明確にし、担当を決定する。</td>
+                    </tr>
+                </table>
             </div>
+
+
         </div>
 
         <!-- Log Table at the Bottom -->
@@ -140,6 +452,8 @@
     <script>
         let logs = [];
         let videoFileName = "log"; // Default name
+        let csvData = [];
+        let currentIndex = -1;
 
         const videoUpload = document.getElementById("videoUpload");
         const videoPlayer = document.getElementById("videoPlayer");
@@ -218,21 +532,10 @@
                 updateTable();
             }
         }
-
-
-
-        document.getElementById("clearButton").addEventListener("click", function() {
-            if (confirm("ログをすべてクリアしますか？")) {
-                logs = [];
-                updateTable();
-                document.getElementById("exportButton").disabled = true;
-            }
-        });
-
         document.getElementById("exportButton").addEventListener("click", function() {
             const today = new Date().toISOString().slice(0, 10);
             const fileName = `${videoFileName}_${today}.json`;
-
+        
             const logData = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(logs, null, 2));
             const logAnchor = document.createElement("a");
             logAnchor.setAttribute("href", logData);
@@ -241,6 +544,161 @@
             logAnchor.click();
             document.body.removeChild(logAnchor);
         });
+        document.getElementById("clearButton").addEventListener("click", function() {
+            if (confirm("ログをすべてクリアしますか？")) {
+                logs = [];
+                updateTable();
+                document.getElementById("exportButton").disabled = true;
+            }
+        });
+        
+        function loadCSVFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                parseCSV(event.target.result);
+            };
+            reader.readAsText(file);
+        }
+        
+        function parseCSV(text) {
+            console.log("Raw CSV Text:", text); // Debugging log to check file content
+        
+            // Normalize line breaks and remove empty lines
+            const rows = text.split(/\r?\n/).filter(row => row.trim() !== "").map(row => row.split(","));
+        
+            console.log("Parsed Rows:", rows); // Debugging log to check array format
+        
+            if (rows.length < 2) {
+                console.warn("CSV file is empty or has incorrect format.");
+                return;
+            }
+        
+            csvData = rows.slice(1).map(row => ({
+                startTime: row[1]?.replace("0 days ", "").trim() || "",
+                filename: row[0]?.trim() || "",
+                PatternName: row[2]?.trim() || ""  // Adjust based on column index
+            }));
+        
+            console.log("Parsed CSV Data:", csvData); // Debugging log to check extracted data
+        
+            fileSelect.innerHTML = "";
+            timeSelect.innerHTML = "";
+            loadFilenames();
+        }
+
+
+
+        
+        const fileSelect = document.getElementById("fileSelect");
+        const timeSelect = document.getElementById("timeSelect");
+        const selectedPattern = document.getElementById("selectedPattern");
+        const csvUpload = document.getElementById("csvUpload");
+        
+        csvUpload.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                console.log("CSV File Selected:", file.name);
+                loadCSVFile(file);
+            }
+        });
+        
+        function loadFilenames() {
+            fileSelect.innerHTML = ""; // Clear dropdown
+            const uniqueFiles = [...new Set(csvData.map(row => row.filename))].filter(f => f);
+        
+            console.log("Unique Files:", uniqueFiles); // Debugging log
+        
+            if (uniqueFiles.length === 0) {
+                console.warn("No filenames found.");
+                return;
+            }
+        
+            uniqueFiles.forEach(file => {
+                let option = document.createElement("option");
+                option.value = file;
+                option.textContent = file;
+                fileSelect.appendChild(option);
+            });
+        
+            fileSelect.selectedIndex = 0;
+            loadTimePoints();
+        }
+        
+        function loadTimePoints() {
+            const selectedFile = fileSelect.value;
+            console.log("Selected File:", selectedFile); // Debugging log
+        
+            timeSelect.innerHTML = "";
+            const filteredData = csvData.filter(row => row.filename === selectedFile);
+        
+            console.log("Filtered Time Points:", filteredData); // Debugging log
+        
+            if (filteredData.length === 0) {
+                console.warn("No time points found for", selectedFile);
+                return;
+            }
+        
+            filteredData.forEach((row, index) => {
+                let option = document.createElement("option");
+                option.value = index;
+                option.textContent = row.startTime;
+                timeSelect.appendChild(option);
+            });
+        
+            timeSelect.selectedIndex = 0;
+            updateSelection();
+        }
+        function parseTimeToSeconds(timeString) {
+            const parts = timeString.split(":").map(Number);
+            return (parts.length === 3) 
+                ? parts[0] * 3600 + parts[1] * 60 + parts[2]  // HH:MM:SS
+                : parts[0] * 60 + parts[1];  // MM:SS (if HH is missing)
+        }
+
+        
+        function updateSelection() {
+            if (timeSelect.selectedIndex < 0) return;
+            currentIndex = parseInt(timeSelect.value);
+            
+            if (csvData[currentIndex]) {
+                selectedPattern.textContent = "パターン名: " + csvData[currentIndex].PatternName;
+                
+                let targetTime = parseTimeToSeconds(csvData[currentIndex].startTime);
+                if (!isNaN(targetTime)) {
+                    videoPlayer.currentTime = targetTime; // Jump to selected time
+                    videoPlayer.pause();  // Auto-play the video
+                } else {
+                    console.warn("Invalid time format:", csvData[currentIndex].startTime);
+                }
+            }
+        }
+
+        
+        // Ensure navigation works correctly
+        document.getElementById("prevButton").addEventListener("click", function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                timeSelect.selectedIndex = currentIndex;
+                updateSelection();
+            } else {
+                console.log("Already at the first time point.");
+            }
+        });
+        
+        document.getElementById("nextButton").addEventListener("click", function() {
+            if (currentIndex < timeSelect.options.length - 1) {
+                currentIndex++;
+                timeSelect.selectedIndex = currentIndex;
+                updateSelection();
+            } else {
+                console.log("Already at the last time point.");
+            }
+        });
+
+        
+        fileSelect.addEventListener("change", loadTimePoints);
+        timeSelect.addEventListener("change", updateSelection);
+
 
     </script>
 </body>
