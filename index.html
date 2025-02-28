@@ -659,13 +659,10 @@
         
         function loadTimePoints() {
             const selectedFile = fileSelect.value;
-            console.log("Selected File:", selectedFile); // Debugging log
-        
             timeSelect.innerHTML = "";
+            
             const filteredData = csvData.filter(row => row.filename === selectedFile);
-        
-            console.log("Filtered Time Points:", filteredData); // Debugging log
-        
+            
             if (filteredData.length === 0) {
                 console.warn("No time points found for", selectedFile);
                 return;
@@ -674,59 +671,67 @@
             filteredData.forEach((row, index) => {
                 let option = document.createElement("option");
                 option.value = index;
-                option.textContent = row.startTime;
+                option.textContent = row.startTime.trim();
                 timeSelect.appendChild(option);
             });
         
             timeSelect.selectedIndex = 0;
-            updateSelection();
+            updateSelection(); // Automatically jump to first time point
         }
+
         function parseTimeToSeconds(timeString) {
+            if (!timeString) return NaN; // Ensure timeString is valid
+            
             const parts = timeString.split(":").map(Number);
-            return (parts.length === 3) 
-                ? parts[0] * 3600 + parts[1] * 60 + parts[2]  // HH:MM:SS
-                : parts[0] * 60 + parts[1];  // MM:SS (if HH is missing)
+            
+            if (parts.length === 3) {
+                return parts[0] * 3600 + parts[1] * 60 + parts[2]; // HH:MM:SS
+            } else if (parts.length === 2) {
+                return parts[0] * 60 + parts[1]; // MM:SS
+            }
+            
+            return NaN; // Invalid format
         }
+
 
         
         function updateSelection() {
-            if (timeSelect.selectedIndex < 0) return;
-            currentIndex = parseInt(timeSelect.value);
+            let selectedIndex = timeSelect.selectedIndex;
             
-            if (csvData[currentIndex]) {
-                selectedPattern.textContent = "パターン名: " + csvData[currentIndex].PatternName;
-                
-                let targetTime = parseTimeToSeconds(csvData[currentIndex].startTime);
-                if (!isNaN(targetTime)) {
-                    videoPlayer.currentTime = targetTime; // Jump to selected time
-                    videoPlayer.pause();  // Auto-play the video
-                } else {
-                    console.warn("Invalid time format:", csvData[currentIndex].startTime);
-                }
+            if (selectedIndex < 0) return;
+        
+            let selectedOption = timeSelect.options[selectedIndex].textContent.trim();
+            
+            let targetTime = parseTimeToSeconds(selectedOption);
+            
+            if (!isNaN(targetTime) && targetTime >= 0) {
+                videoPlayer.currentTime = targetTime; // Jump to selected time
+                videoPlayer.pause();  // Stop autoplay if necessary
+            } else {
+                console.warn("Invalid time format:", selectedOption);
+            }
+        
+            if (csvData[selectedIndex]) {
+                selectedPattern.textContent = "パターン名: " + csvData[selectedIndex].PatternName;
             }
         }
 
+
         
-        // Ensure navigation works correctly
         document.getElementById("prevButton").addEventListener("click", function() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                timeSelect.selectedIndex = currentIndex;
+            if (timeSelect.selectedIndex > 0) {
+                timeSelect.selectedIndex--;
                 updateSelection();
-            } else {
-                console.log("Already at the first time point.");
             }
         });
         
         document.getElementById("nextButton").addEventListener("click", function() {
-            if (currentIndex < timeSelect.options.length - 1) {
-                currentIndex++;
-                timeSelect.selectedIndex = currentIndex;
+            if (timeSelect.selectedIndex < timeSelect.options.length - 1) {
+                timeSelect.selectedIndex++;
                 updateSelection();
-            } else {
-                console.log("Already at the last time point.");
             }
         });
+
 
         
         fileSelect.addEventListener("change", loadTimePoints);
